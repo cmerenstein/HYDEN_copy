@@ -1,0 +1,16 @@
+#include <vector>
+#include <string>
+
+struct distribution_t {
+/* for clarity, use 4 separate pointers rather than a 2d array  */
+
+	float* a;
+	float* t;
+	float* g;
+	float* c;
+	
+};
+
+distribution_t get_distribution(const std::vector<std::string>& alignment, int k);
+
+float calc_entropy(const distribution_t& dist, int k);
