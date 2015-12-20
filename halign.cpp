@@ -7,16 +7,23 @@
 using namespace std;
 
 
-const int k = 20; // length of the primers we're looking for
+const int k = 20; // length of the primers we're looking for. TODO: move to main.cpp
 const int num_alignments = 100;
 
-void halign(const char* fasta_file){
-	
+alignment_t* halign(const char* fasta_file){
+/* A heuristic that returns an alignment_t of kmers from each sequence that minimizes
+the total entropy value. It simply checks each kmer against every other for each sequence.
+2 shortcuts makes this faster: 1) it starts by checking only every 5th sequence, then only
+tries the rest if it's a possibly good match
+2) if a kmer doesn't lead to a good alignment, the next few kmers in that sequence get skipped
+and are not used to seed a new alignment, since they share a lot of sequence with the one
+that was bad.
+*/	
 	ifstream seqs_in(fasta_file);
 	
 	vector<string> sequences;
 	string line;
-	alignment_t best_alignments[num_alignments]; // This is definitely not the best data structure for this, dunno if it will effect much
+	static alignment_t best_alignments[num_alignments]; // This is definitely not the best data structure for this, dunno if it will effect much
 	initialize_best_alignments(best_alignments);
 	
 	
@@ -47,6 +54,7 @@ void halign(const char* fasta_file){
 	for (i = 0; i < num_alignments; i++){
 		print_alignment(best_alignments[i]);
 	}
+	return best_alignments;
 }
 
 alignment_t get_alignment(const string& probe, vector<string>& sequences, const int a){

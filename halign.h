@@ -11,7 +11,7 @@ struct alignment_t {
 	double entropy;
 };
 
-void halign(const char* fasta_file);
+alignment_t* halign(const char* fasta_file);
 std::string align_kmer(const std::string& target, const std::string& probe, const int& k, int& min_mismatches);
 alignment_t get_alignment(const std::string& target, std::vector<std::string>& sequences, const int a);
 void initialize_best_alignments(alignment_t* best_alignment);
