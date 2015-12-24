@@ -1,0 +1,17 @@
+TODO
+
+12/14/2015
+
+In progress:
+- sort_alignment
+
+Major Steps:
+- contraction algorithm
+- expansion algorithm
+- primer improvements
+- specificity
+
+Necessary improvements:
+- formula for threshold in h-align
+- input arguments
+- change distribution_t to have a 2d array
