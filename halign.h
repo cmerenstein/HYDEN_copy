@@ -1,3 +1,6 @@
+#ifndef HALIGN_H
+#define HALIGN_H
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -17,3 +20,5 @@ alignment_t get_alignment(const std::string& target, std::vector<std::string>& s
 void initialize_best_alignments(alignment_t* best_alignment);
 void save_alignment(alignment_t* best_alignments, alignment_t new_alignment);
 void print_alignment(const alignment_t& alignment);
+
+#endif
