@@ -50,10 +50,10 @@ that was bad.
 		}
 	}
 	printf("\n");
-	int i;
-	for (i = 0; i < num_alignments; i++){
-		print_alignment(best_alignments[i]);
-	}
+	// int i;
+	// for (i = 0; i < num_alignments; i++){
+		// print_alignment(best_alignments[i]);
+	// }
 	return best_alignments;
 }
 

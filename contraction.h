@@ -6,6 +6,9 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <algorithm>
+#include <map>
+#include <typeinfo>
 
 void sort_alignment(alignment_t align);
 

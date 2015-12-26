@@ -1,4 +1,5 @@
 #include "contraction.h"
+
 using namespace std;
 const int k = 20; // Must stay same as k in halign.cpp TODO: move both to main
 
@@ -9,7 +10,7 @@ This is accomplished by making an ordered list of bases and positions and removi
 */
 
 void sort_alignment(alignment_t align){
-	vector<vector<string> > freq_pos; // frequency and position.
+	map<float, vector<string> > freq_pos; // frequency and position.
 	float frequencies[k*4];
 	
 	distribution_t d;
@@ -17,39 +18,74 @@ void sort_alignment(alignment_t align){
 	
 	int i;
 	for (i = 0; i<k;i++){
+		frequencies[(i*4)] = align.dist.a[i];
+		frequencies[(i*4)+1] = align.dist.t[i];
+		frequencies[(i*4)+2] = align.dist.c[i];
+		frequencies[(i*4)+3] = align.dist.g[i];
+	}
+	cout << "boom goes the dynamite" << endl;
+	for (i = 0; i<k; i++){
 		string position = to_string(i);
-		string frequency;
+		float frequency;
 		
 		// because distribution_t has 4 different arrays, need to add each letter manually for now
-		vector<string> a_entry;
-		string a_position = "a" + position;
-		a_entry.push_back(a_position);
-		frequency = to_string(align.dist.a[i]);
-		a_entry.push_back(frequency);
-		freq_pos.push_back(a_entry);
-		cout << a_position << " " << frequency << endl;
+		// TODO make this way cleaner (2d array for distribution_t)
+		string base_position = "a" + position;
+		frequency = align.dist.a[i];
+		try {	
+			freq_pos[frequency].push_back(base_position);
+		}
+		catch (int e) {
+			cout << "error " << e << endl;
+			// freq_pos[align.dist.a[i]];
+			// freq_pos[align.dist.a[i]].push_back(base_position);
+		}
+		cout << " i = " << i << "  " << frequency << " ";
+		int size = freq_pos[frequency].size();
+		cout << freq_pos[frequency].size() << ": ";
+		int print_ct;
+		for (print_ct = 0; print_ct < size; print_ct++){
+			cout << freq_pos[frequency][print_ct] << ", ";
+		}
+		cout << endl;
+		// base_position = "t" + position;
+		// try {
+			// freq_pos[align.dist.t[i]].push_back(base_position);
+		// }
+		// catch (int e) {
+			// freq_pos[align.dist.t[i]] = new vector<string>;
+			// freq_pos[align.dist.t[i]].push_back(base_position);		
+		// }
 		
-		vector<string> t_entry;
-		string t_position = "t" + position;
-		t_entry.push_back(t_position);
-		frequency = to_string(align.dist.t[i]);
-		t_entry.push_back(frequency);
-		freq_pos.push_back(t_entry);
+		// base_position = "c" + position;
+		// try }
+			// freq_pos[align.dist.c[i]].push_back(base_position);
+		// }
+		// catch (int e) {
+			// freq_pos[align.dist.c[i]] = new vector<string>;
+			// freq_pos[align.dist.c[i]].push_back(base_position);			
+		// }
 		
-		vector<string> c_entry;
-		string c_position = "c" + position;
-		c_entry.push_back(c_position);
-		frequency = to_string(align.dist.c[i]);
-		c_entry.push_back(frequency);
-		freq_pos.push_back(c_entry);
-		
-		vector<string> g_entry;
-		string g_position = "g" + position;
-		g_entry.push_back(g_position);
-		frequency = to_string(align.dist.g[i]);
-		g_entry.push_back(frequency);
-		freq_pos.push_back(g_entry);
-		
-				
-	}
+		// base_position = "g" + position;
+		// try {
+			// freq_pos[align.dist.g[i]].push_back(base_position);
+		// }
+		// catch (int e) {
+			// freq_pos[align.dist.g[i]] = new vector<string>;
+			// freq_pos[align.dist.g[i]].push_back(base_position);
+		// }
 }
+	
+	// for (i = 0; i < k*4; i++){
+		// cout << frequencies[i] << endl;
+	// }
+	
+	// cout << "sorted:" << endl;
+	
+	// sort(begin(frequencies), end(frequencies));
+	// for (i = 0; i < k*4; i++){
+		// cout << frequencies[i] << endl;
+	// }
+	
+}
+
