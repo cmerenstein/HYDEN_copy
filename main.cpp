@@ -14,6 +14,8 @@ int main(){
 	
 	int i;
 	for (i = 0; i<100;i++){
-		sort_alignment(alignments[i]);
+		Primer p = sort_alignment(alignments[i]);
+		p.print_sequence();
+		cout << p.get_degeneracy() << endl;
 	}
 }

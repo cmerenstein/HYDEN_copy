@@ -3,6 +3,7 @@
 
 #include "halign.h"
 #include "entropy.h"
+#include "primer.h"
 #include <vector>
 #include <string>
 #include <iostream>
@@ -10,6 +11,6 @@
 #include <map>
 #include <typeinfo>
 
-void sort_alignment(alignment_t align);
+Primer sort_alignment(alignment_t align);
 
 #endif
