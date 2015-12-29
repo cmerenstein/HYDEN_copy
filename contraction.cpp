@@ -23,7 +23,7 @@ Primer sort_alignment(alignment_t align){
 		frequencies[(i*4)+2] = align.dist.c[i];
 		frequencies[(i*4)+3] = align.dist.g[i];
 	}
-	cout << "boom goes the dynamite" << endl;
+	//cout << "boom goes the dynamite" << endl;
 	for (i = 0; i<k; i++){
 		string position = to_string(i);
 		float frequency;

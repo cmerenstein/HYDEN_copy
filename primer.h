@@ -16,6 +16,7 @@ class Primer{
 		Primer (int);
 		Primer (float*, string*, int);
 		void print_sequence();
+		void print_iupac_sequence();
 		int get_degeneracy();
 };
 
