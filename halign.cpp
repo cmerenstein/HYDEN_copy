@@ -2,6 +2,8 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <typeinfo>
+#include <algorithm>
 #include "halign.h"
 
 using namespace std;
@@ -26,14 +28,30 @@ that was bad.
 	static alignment_t best_alignments[num_alignments]; // This is definitely not the best data structure for this, dunno if it will effect much
 	initialize_best_alignments(best_alignments);
 	
+	bool not_first = false; // set to false after the first line
+	string sequence;
 	
 	while(getline(seqs_in, line)){
+		line.erase(remove(line.begin(), line.end(), '\n'), line.end());
 		if (line[0] != '>'){
-			sequences.push_back(line);
+			sequence = sequence + line;
+		}
+		else {		// in fasta format the > line always comes first
+			if (not_first){
+				sequences.push_back(sequence);
+			}
+			else {
+				not_first = true;
+			}
+			
+			string sequence = "";
 		}
 	}
+	sequences.push_back(sequence); // put in the last one
+	
 	
 	int num_seqs = sequences.size();
+	printf("%d sequences.\n", num_seqs);
 	
 	int a, b, c, d;
 	for (a = 0; a < sequences.size(); a++){
