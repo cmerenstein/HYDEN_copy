@@ -16,3 +16,6 @@ Necessary improvements:
 - input arguments
 - change distribution_t to have a 2d array
 - save alignment
+
+Bugs:
+- doesn't properly read in multiple line fasta files (e.g. those straight from ncbi)

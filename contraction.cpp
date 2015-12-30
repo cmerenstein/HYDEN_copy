@@ -10,6 +10,10 @@ This is accomplished by making an ordered list of bases and positions and removi
 */
 
 Primer sort_alignment(alignment_t align){
+/* This function is used to actually generate the Primer object from an alignment.
+Because this is the contraction algorithm, it puts in all possible bases at each position
+(i.e. if at least 1 sequence in the alignment has that base at that position).
+*/
 	map<float, vector<string> > freq_pos; // frequency and position.
 	float frequencies[k*4];
 	
@@ -75,3 +79,6 @@ Primer sort_alignment(alignment_t align){
 	return Primer(frequencies, inorder_base_positions, k*4);
 }
 
+Primer contract(Primer p){
+	
+}
