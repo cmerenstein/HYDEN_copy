@@ -7,7 +7,7 @@
 
 // TODO: getopt() for cmd parameters
 
-int main(int argc, char* argv[]){
+int main(){
 	
 	const char *file_name = "cbbl_unique.fasta";
 	alignment_t *alignments;
