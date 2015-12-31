@@ -5,10 +5,11 @@
 #include "halign.h"
 #include "contraction.h"
 
-// TODO: add global constants
+// TODO: getopt() for cmd parameters
 
-int main(){
-	const char *file_name = "shewanella_phages.fasta";
+int main(int argc, char* argv[]){
+	
+	const char *file_name = "cbbl_unique.fasta";
 	alignment_t *alignments;
 	alignments = halign(file_name);
 	

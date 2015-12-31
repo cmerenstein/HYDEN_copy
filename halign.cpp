@@ -49,18 +49,34 @@ that was bad.
 	}
 	sequences.push_back(sequence); // put in the last one
 	
+	int stride;			// used for skipping through sequences before trying to align all
+	if (sequences.size() < 12){ // play with these numbers more
+		if (sequences.size() < 5){
+			stride = 1;
+		}
+		else {
+			stride = 2;
+		}
+	}
+	else {
+		stride = 5;
+	}
+	
 	
 	int num_seqs = sequences.size();
 	printf("%d sequences.\n", num_seqs);
 	
-	int a, b, c, d;
+	int a, b, c, d; // a loops through sequences, b thru sequence a, c thru all sequences, d thru sequence c
 	for (a = 0; a < sequences.size(); a++){
 		printf("\r%.0f%% aligned.", (float(a)/float(sequences.size()))*100);
 		string s_a = sequences[a];
 		for ( b = 0; (b + k) < s_a.size(); b++){
+			// if (b%100 == 0) {
+				// printf("on base %d of sequence %d\r", b, a);
+			// }
 			string kmer = s_a.substr(b, k);
 			alignment_t align;
-			align = get_alignment(kmer, sequences, a);
+			align = get_alignment(kmer, sequences, a, stride);
 			save_alignment(best_alignments, align);
 			if (align.entropy > 30.0){ //if this one didn't align well, then the next few probably won't either
 				b += 4; 
@@ -75,7 +91,7 @@ that was bad.
 	return best_alignments;
 }
 
-alignment_t get_alignment(const string& probe, vector<string>& sequences, const int a){
+alignment_t get_alignment(const string& probe, vector<string>& sequences, const int a, int& stride){
 /* for a given kmer, or probe, return the alignment that fits best.
 First only tries with every 5th sequence, then if the average mismatches of that alignment is low enough,
 it extends for all sequences and returns the alignment.*/
@@ -84,10 +100,10 @@ it extends for all sequences and returns the alignment.*/
 	vector<string> initial_alignment;
 	alignment_t best_alignment;
 	float sum_mismatches = 0;
-
+	
 	int c;
 	float n;
-	for ( c = 0; c < sequences.size(); c+= 5){
+	for ( c = 0; c < sequences.size(); c+= stride){
 		if (c != a){ // don't compare sequence to itself
 			int min_mismatches = k;
 			string best_match = align_kmer(sequences[c], probe, k, min_mismatches);
@@ -104,11 +120,11 @@ it extends for all sequences and returns the alignment.*/
 	// printf("the average mismatches is %f\n", (sum_mismatches/n));
 	if (sum_mismatches/n < threashold){
 		for ( c = 0; c < sequences.size(); c++){
-			if (c%5 == 0 && c != a){
-				int index_initial = int(float(c)/5.0);
+			if (c%stride == 0 && c != a){ // don't redo the ones we've seen
+				int index_initial = int(float(c)/float(stride)); // where it is in the initial alignment
 				best_alignment.kmers.push_back(initial_alignment[index_initial]);
 			}
-			if (c != a){ // don't compare sequence to itself
+			else if (c != a){ // don't compare sequence to itself
 				int min_mismatches = k;
 				string best_match = align_kmer(sequences[c], probe, k, min_mismatches);
 				best_alignment.kmers.push_back(best_match);
@@ -138,13 +154,16 @@ Can be improved using popcnt instruction, or even better with SSE3*/
 	int d;
 	for (d = 0; (d + k) < target.size(); d++){
 		string sub_target = target.substr(d, k);
-		int mismatches = k;
+		int mismatches = 0;
 		
 		int e;
 		for (e = 0; e < k; e++){
 		/* looking at a few bp at a time and storing comparisons in an array for reuse might improve speed?*/
-			if (sub_target[e] == probe[e]){				
-				mismatches--;
+			if (sub_target[e] != probe[e]){				
+				mismatches++;
+				if (mismatches > min_mismatches){ // this makes it much faster
+					break;
+				}
 			}
 		}
 
