@@ -9,7 +9,7 @@
 
 int main(){
 	
-	const char *file_name = "cbbl_unique.fasta";
+	const char *file_name = "shewanella_phages.fasta";
 	alignment_t *alignments;
 	alignments = halign(file_name);
 	

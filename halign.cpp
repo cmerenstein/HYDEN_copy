@@ -74,7 +74,7 @@ that was bad.
 	
 	int a, b, c, d; // a loops through sequences, b thru sequence a, c thru all sequences, d thru sequence c
 	for (a = 0; a < sequences.size(); a++){
-		// printf("\r%.0f%% aligned.", (float(a)/float(sequences.size()))*100);
+		printf("\r%.0f%% aligned.", (float(a)/float(sequences.size()))*100);
 		string s_a = sequences[a];
 		for ( b = 0; (b + k) < s_a.size(); b++){
 			// if (b%100 == 0) {

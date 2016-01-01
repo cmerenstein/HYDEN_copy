@@ -12,6 +12,7 @@ Major Steps:
 
 Necessary improvements:
 - insure h-align produces unique alignments
+- parallel the h-align step
 - formula for threshold in h-align
 - input arguments
 - change distribution_t to have a 2d array
