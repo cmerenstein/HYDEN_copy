@@ -40,6 +40,7 @@ that was bad.
 		}
 		else {		// in fasta format the > line always comes first
 			if (not_first){
+				transform(sequence.begin(), sequence.end(), sequence.begin(),::tolower);
 				sequences.push_back(sequence);
 			}
 			else {
@@ -49,6 +50,7 @@ that was bad.
 			sequence = "";
 		}
 	}
+	transform(sequence.begin(), sequence.end(), sequence.begin(),::tolower);
 	sequences.push_back(sequence); // put in the last one
 	
 	// int q;
@@ -59,7 +61,7 @@ that was bad.
 	
 	int stride;			// used for skipping through sequences before trying to align all
 	if (sequences.size() < 12){ // play with these numbers more
-		if (sequences.size() < 5){
+		if (sequences.size() < 6){
 			stride = 1;
 		}
 		else {
@@ -75,25 +77,30 @@ that was bad.
 	printf("%d sequences.\n", num_seqs);
 	
 	float threshold = 99; // used for some of the shortcuts. needs to start high;  
+	int skip_counter = 0;
 	
 	int a, b, c, d; // a loops through sequences, b thru sequence a, c thru all sequences, d thru sequence c
 	for (a = 0; a < sequences.size(); a++){
-		printf("\r%.0f%% aligned.", (float(a)/float(sequences.size()))*100);
+		// printf("\r%.0f%% aligned.", (float(a)/float(sequences.size()))*100);
 		string s_a = sequences[a];
 		for ( b = 0; (b + k) < s_a.size(); b++){
-			// if (b%100 == 0) {
-				// printf("on base %d of sequence %d\r", b, a);
-			// }
+			if (b%100 == 0) {
+				printf("on base %d of sequence %d\r", b, a);
+			}
 			string kmer = s_a.substr(b, k);
 			alignment_t align;
 			align = get_alignment(kmer, sequences, a, stride, num_seqs, threshold);
 			threshold = save_alignment(best_alignments, align);
-			if (align.entropy > threshold + (threshold)){ //if this one didn't align well, then the next few can't either
-				b += 4; 
-			}
+			cout << "entropy = " << align.entropy << endl;
+			if (align.entropy > threshold ){ //if this one didn't align well, then the next few can't either
+				b += 4;
+				skip_counter +=4;
+				printf("\t\t %d skipped\n", skip_counter);
+			}	
 		}
 	}
 	printf("\n");
+	cout << skip_counter << endl;
 	// int i;
 	// for (i = 0; i < num_alignments; i++){
 		// print_alignment(best_alignments[i]);
@@ -106,7 +113,7 @@ alignment_t get_alignment(const string& probe, vector<string>& sequences, const 
 First only tries with every stride-th sequence, then if the average mismatches of that alignment is low enough,
 it extends for all sequences and returns the alignment.*/
 	
-	string initial_alignment[(num_seqs/stride)+1];
+	string initial_alignment[(num_seqs/stride)];
 	alignment_t best_alignment;
 	best_alignment.num_seqs = num_seqs;
 	best_alignment.kmers = new string[num_seqs];
@@ -116,7 +123,7 @@ it extends for all sequences and returns the alignment.*/
 
 	int c;
 	#pragma omp parallel for
-	for ( c = 0; c < sequences.size(); c+= stride){
+	for ( c = 0; c < num_seqs; c+= stride){
 		if (c != a){ // don't compare sequence to itself
 			int min_mismatches = k;
 			string best_match = align_kmer(sequences[c], probe, k, min_mismatches);
@@ -129,7 +136,12 @@ it extends for all sequences and returns the alignment.*/
 		}
 		
 	}
-	distribution_t initial_dist = get_distribution(initial_alignment, k, (num_seqs/stride)+1);
+	// cout << "\n------------------------" << endl;
+	// cout << "num_seqs/stride = " << num_seqs/stride << endl;
+	// for (int t = 0; t<(num_seqs/stride); t++) {cout<<initial_alignment[t]<<endl;}
+	// cout << "------------------------" << endl;
+
+	distribution_t initial_dist = get_distribution(initial_alignment, k, (num_seqs/stride));
 	float intial_entropy = calc_entropy(initial_dist, k);
 	
 	// printf("the average mismatches is %f\n", (sum_mismatches/n));
@@ -142,7 +154,7 @@ it extends for all sequences and returns the alignment.*/
 	else {
 		if (intial_entropy < threshold*3){
 			#pragma omp parallel for
-			for ( c = 0; c < sequences.size(); c++){
+			for ( c = 0; c < num_seqs; c++){
 				if (c%stride == 0 && c != a){ // don't redo the ones we've seen
 					int index_initial = int(float(c)/float(stride)); // where it is in the initial alignment
 					best_alignment.kmers[c] = initial_alignment[index_initial];

@@ -50,18 +50,18 @@ distribution_t get_distribution(string *alignment, int k, int num_seqs){
 
 float calc_entropy(const distribution_t& dist, int k){
 	int i;
-	float entropy;
+	float entropy = 0;
 	for (i= 0; i < k; i++){
-		if (dist.a[i] != 0){
+		if (dist.a[i] > 0.01){
 			entropy += (dist.a[i] * log2(dist.a[i]));
 		}
-		if (dist.t[i] != 0) {
+		if (dist.t[i] > 0.01){
 			entropy += (dist.t[i] * log2(dist.t[i]));
 		}
-		if (dist.c[i] != 0){
+		if (dist.c[i] > 0.01){
 			entropy += (dist.c[i] * log2(dist.c[i]));
 		}
-		if (dist.g[i] != 0){
+		if (dist.g[i] > 0.01){
 			entropy += (dist.g[i] * log2(dist.g[i]));
 		}
 	}

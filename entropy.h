@@ -9,10 +9,7 @@ struct distribution_t {
 	would function better as 2d array, this setup makes contraction program cumbersome
 	*/
 
-	float* a;
-	float* t;
-	float* g;
-	float* c;
+	float** table;
 	
 };
 
