@@ -16,7 +16,7 @@ struct distribution_t {
 	
 };
 
-distribution_t get_distribution(const std::vector<std::string>& alignment, int k);
+distribution_t get_distribution(std::string *alignment, int k, int num_seqs);
 
 float calc_entropy(const distribution_t& dist, int k);
 

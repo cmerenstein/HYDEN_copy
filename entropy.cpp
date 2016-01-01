@@ -8,7 +8,7 @@
 
 using namespace std;
 
-distribution_t get_distribution(const vector<string>& alignment, int k){
+distribution_t get_distribution(string *alignment, int k, int num_seqs){
 	/* gets an array for each base with the frequency at each position.
 	k is the size of sequences being aligned*/
 	distribution_t dist;
@@ -19,7 +19,7 @@ distribution_t get_distribution(const vector<string>& alignment, int k){
 	
 	int i; // through each letter of sequence
 	int j; // through each sequence
-	for (j = 0; j < alignment.size(); j++){
+	for (j = 0; j < num_seqs; j++){
 		string seq = alignment[j];
 		for (i = 0; i < k; i++){
 			switch (seq[i]){
@@ -39,7 +39,7 @@ distribution_t get_distribution(const vector<string>& alignment, int k){
 		}
 	}
 	for (i = 0; i < k; i++){ // change count to percent
-		float n = float(alignment.size());
+		float n = float(num_seqs);
 		dist.a[i] = float(dist.a[i])/n;
 		dist.t[i] = float(dist.t[i])/n;
 		dist.c[i] = float(dist.c[i])/n;

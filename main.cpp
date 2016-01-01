@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "halign.h"
+#include "omp.h"
 #include "contraction.h"
 
 // TODO: getopt() for cmd parameters
