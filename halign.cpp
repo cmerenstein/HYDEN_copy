@@ -143,7 +143,7 @@ it extends for all sequences and returns the alignment.*/
 
 	distribution_t initial_dist = get_distribution(initial_alignment, k, (num_seqs/stride));
 	float intial_entropy = calc_entropy(initial_dist, k);
-	
+
 	// printf("the average mismatches is %f\n", (sum_mismatches/n));
 	
 	if (stride == 1) { // initial alignment is the full alignment if stride is 1

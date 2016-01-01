@@ -12,11 +12,11 @@ distribution_t get_distribution(string *alignment, int k, int num_seqs){
 	/* gets an array for each base with the frequency at each position.
 	k is the size of sequences being aligned*/
 	distribution_t dist;
-	dist.a = new float[k];
-	dist.t = new float[k];
-	dist.c = new float[k];
-	dist.g = new float[k];
-	
+	dist.table = new float*[4];
+
+	for (int j = 0; j<4; j++){
+		dist.table[j] = new float[k];
+	}	
 	int i; // through each letter of sequence
 	int j; // through each sequence
 	for (j = 0; j < num_seqs; j++){
@@ -24,45 +24,37 @@ distribution_t get_distribution(string *alignment, int k, int num_seqs){
 		for (i = 0; i < k; i++){
 			switch (seq[i]){
 				case 'a':
-					dist.a[i]++;
-					break;
-				case 't':
-					dist.t[i]++;
+					dist.table[0][i]++;
 					break;
 				case 'c':
-					dist.c[i]++;
+					dist.table[1][i]++;
 					break;
 				case 'g':
-					dist.g[i]++;
+					dist.table[2][i]++;
+					break;
+				case 't':
+					dist.table[3][i]++;
 					break;
 			}
 		}
 	}
-	for (i = 0; i < k; i++){ // change count to percent
-		float n = float(num_seqs);
-		dist.a[i] = float(dist.a[i])/n;
-		dist.t[i] = float(dist.t[i])/n;
-		dist.c[i] = float(dist.c[i])/n;
-		dist.g[i] = float(dist.g[i])/n;
+	float n = float(num_seqs);
+	for (j = 0; j < 4; j++){
+		for (i = 0; i < k; i++){ // change count to percent
+			dist.table[j][i] = float(dist.table[j][i])/n;
+		}
 	}
 	return dist;
 }
 
 float calc_entropy(const distribution_t& dist, int k){
-	int i;
 	float entropy = 0;
-	for (i= 0; i < k; i++){
-		if (dist.a[i] > 0.01){
-			entropy += (dist.a[i] * log2(dist.a[i]));
-		}
-		if (dist.t[i] > 0.01){
-			entropy += (dist.t[i] * log2(dist.t[i]));
-		}
-		if (dist.c[i] > 0.01){
-			entropy += (dist.c[i] * log2(dist.c[i]));
-		}
-		if (dist.g[i] > 0.01){
-			entropy += (dist.g[i] * log2(dist.g[i]));
+	for (int j = 0; j< 4; j++){ 
+		for (int i= 0; i < k; i++){
+			float freq = dist.table[j][i];
+			if (freq > 0.01){
+				entropy += (freq * log2(freq));
+			}
 		}
 	}
 	return -(entropy);
