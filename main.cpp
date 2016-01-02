@@ -10,13 +10,13 @@
 
 int main(){
 	
-	const char *file_name = "shewanella_phages.fasta";
+	const char *file_name = "cbbl_unique.fasta";
 	alignment_t *alignments;
 	alignments = halign(file_name);
 	
-	// int i;
-	// for (i = 0; i<100;i++){
-		// Primer p = sort_alignment(alignments[i]);
-		// p.print_iupac_sequence();
-	// }
+	int i;
+	for (i = 0; i<100;i++){
+		Primer p = sort_alignment(alignments[i]);
+		p.print_iupac_sequence();
+	}
 }

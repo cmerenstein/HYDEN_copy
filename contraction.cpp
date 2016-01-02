@@ -20,37 +20,30 @@ Because this is the contraction algorithm, it puts in all possible bases at each
 	distribution_t d;
 	d = align.dist;
 	
-	int i;
-	for (int j = 0; i<4; j++){
-		for (i = 0; i<k;i++){
-			frequencies[(i*4)+j] = align.dist.table[j][i];
+	int q;
+	for (int j = 0; j<4; j++){
+		for (int i = 0; i<k;i++){
+			frequencies[q] = align.dist.table[j][i];
+			q++;
 		}
 	}
 	//cout << "boom goes the dynamite" << endl;
 	map<int, string> base_order = {{0, "a"}, {1,"c"},{2,"g"},{3,"t"}};
 	
 	for (int j = 0; j<4;j++){
-		for (i = 0; i<k; i++){
+		for (int i = 0; i<k; i++){
 			string position = to_string(i); // move these out of the loop?
 			float frequency;
-			string base_position = base_order[j]+ position;
-			
+			string base_position = base_order[j] + position;
 			frequency = align.dist.table[j][i];
-			freq_pos[frequency].push_back(base_position);
-									// cout << " i = " << i << "  " << frequency << " ";
-									// int size = freq_pos[frequency].size();
-									// cout << freq_pos[frequency].size() << ": ";
-									// int print_ct;
-									// for (print_ct = 0; print_ct < size; print_ct++){
-										// cout << freq_pos[frequency][print_ct] << ", ";
-									// }
-									// cout << endl;			
+			freq_pos[frequency].push_back(base_position);			
 		}
 	}
+	
 	sort(begin(frequencies), end(frequencies));
 	string inorder_base_positions[k*4];
 	
-	for (i = 0; i < k*4; i++){
+	for (int i = 0; i < k*4; i++){
 		inorder_base_positions[i] = freq_pos[frequencies[i]].front();
 		freq_pos[frequencies[i]].erase(freq_pos[frequencies[i]].begin());
 	}
