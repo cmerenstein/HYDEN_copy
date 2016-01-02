@@ -81,26 +81,25 @@ that was bad.
 	
 	int a, b, c, d; // a loops through sequences, b thru sequence a, c thru all sequences, d thru sequence c
 	for (a = 0; a < sequences.size(); a++){
-		// printf("\r%.0f%% aligned.", (float(a)/float(sequences.size()))*100);
+		printf("\r%.0f%% aligned.", (float(a)/float(sequences.size()))*100);
 		string s_a = sequences[a];
 		for ( b = 0; (b + k) < s_a.size(); b++){
-			if (b%100 == 0) {
-				printf("on base %d of sequence %d\r", b, a);
-			}
+			// if (b%100 == 0) {
+				// printf("on base %d of sequence %d\r", b, a);
+			// }
 			string kmer = s_a.substr(b, k);
 			alignment_t align;
 			align = get_alignment(kmer, sequences, a, stride, num_seqs, threshold);
 			threshold = save_alignment(best_alignments, align);
-			cout << "entropy = " << align.entropy << endl;
 			if (align.entropy > threshold ){ //if this one didn't align well, then the next few can't either
 				b += 4;
-				skip_counter +=4;
-				printf("\t\t %d skipped\n", skip_counter);
+				// skip_counter +=4;
+				// printf("\t\t %d skipped\n", skip_counter);
 			}	
 		}
 	}
 	printf("\n");
-	cout << skip_counter << endl;
+	// cout << skip_counter << endl;
 	// int i;
 	// for (i = 0; i < num_alignments; i++){
 		// print_alignment(best_alignments[i]);

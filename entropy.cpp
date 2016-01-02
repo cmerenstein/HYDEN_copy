@@ -16,13 +16,16 @@ distribution_t get_distribution(string *alignment, int k, int num_seqs){
 
 	for (int j = 0; j<4; j++){
 		dist.table[j] = new float[k];
+		for (int i = 0; i< k; i++){
+			dist.table[j][i] = 0;
+		}
 	}	
 	int i; // through each letter of sequence
 	int j; // through each sequence
 	for (j = 0; j < num_seqs; j++){
 		string seq = alignment[j];
 		for (i = 0; i < k; i++){
-			switch (seq[i]){
+			switch (seq[i]){ // TODO replace with map
 				case 'a':
 					dist.table[0][i]++;
 					break;
@@ -57,5 +60,15 @@ float calc_entropy(const distribution_t& dist, int k){
 			}
 		}
 	}
+	// if (entropy > 0){
+		// for (int j = 0; j<4;j++){
+			// for (int i = 0; i<k;i++){
+				//cout << dist.table[j][i] <<endl;
+				// printf(" %f ", dist.table[j][i]);
+			// }
+			// cout << endl;
+		// }
+	// }
+	
 	return -(entropy);
 }
